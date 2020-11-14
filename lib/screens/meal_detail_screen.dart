@@ -3,39 +3,69 @@ import 'package:flutter/material.dart';
 import 'package:meals_udemy/models/meal.dart';
 import 'package:meals_udemy/dummy_data.dart';
 
-class MealDetail extends StatelessWidget {
+class MealDetail extends StatefulWidget {
+  final Function setfavorite, undoFavorite;
+
+  const MealDetail(this.setfavorite, this.undoFavorite);
+
+  @override
+  _MealDetailState createState() => _MealDetailState();
+}
+
+class _MealDetailState extends State<MealDetail> {
   @override
   Widget build(BuildContext context) {
-    final title =
-        ModalRoute.of(context).settings.arguments as Map<String, String>;
+    final meals =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     final selectedMeal =
-        DUMMY_MEALS.firstWhere((meal) => meal.title == title['title']);
+        DUMMY_MEALS.firstWhere((meal) => meal.title == meals['title']);
     return Scaffold(
-        appBar: AppBar(
-          title: Text(selectedMeal.title),
+      appBar: AppBar(
+        title: Text(selectedMeal.title),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            networkImage(selectedMeal),
+            Container(
+              child: Text(
+                "Ingredients",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+            ingredientItem(context, selectedMeal),
+            Container(
+              margin: EdgeInsets.only(top: 10.0),
+              child: Text(
+                "Steps",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+            preparationSteps(context, selectedMeal),
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              networkImage(selectedMeal),
-              Container(
-                child: Text(
-                  "Ingredients",
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ),
-              ingredientItem(context, selectedMeal),
-              Container(
-                margin: EdgeInsets.only(top: 10.0),
-                child: Text(
-                  "Steps",
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ),
-              preparationSteps(context, selectedMeal),
-            ],
-          ),
-        ));
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(
+          selectedMeal.isFavorite ? Icons.favorite : Icons.favorite_border,
+          color: Colors.red,
+          size: 50.0,
+        ),
+        onPressed: () {
+          if (selectedMeal.isFavorite)
+            setState(() {
+              selectedMeal.isFavorite = false;
+              widget.undoFavorite(selectedMeal);
+            });
+          else {
+            setState(() {
+              selectedMeal.isFavorite = true;
+              widget.setfavorite(selectedMeal);
+            });
+          }
+        },
+      ),
+    );
   }
 
   Widget ingredientItem(BuildContext context, Meal selectedMeal) {
@@ -51,7 +81,6 @@ class MealDetail extends StatelessWidget {
       child: ListView.builder(
           itemCount: selectedMeal.ingredients.length,
           itemBuilder: (context, index) {
-            print(selectedMeal.title);
             return Card(
               color: Theme.of(context).accentColor,
               child: Text(

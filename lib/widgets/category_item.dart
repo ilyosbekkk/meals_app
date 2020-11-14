@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'file:///D:/Flutter%20Projects/meals_udemy/lib/widgets/recipes.dart';
 
 class CategoryItem extends StatelessWidget {
   final String id;

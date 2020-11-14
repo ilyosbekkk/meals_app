@@ -1,26 +1,25 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import 'package:meals_udemy/models/meal.dart';
 
 class MealItem extends StatelessWidget {
-
   final String title;
   final String imaeUrl;
   final int duration;
   final Complexity complexity;
   final Affordability affordability;
 
-  const MealItem(
-      {this.title,
-      this.imaeUrl,
-      this.duration,
-      this.complexity,
-      this.affordability});
+  MealItem({
+    this.title,
+    this.imaeUrl,
+    this.duration,
+    this.complexity,
+    this.affordability,
+  });
 
   void selectMeal(BuildContext context) {
-    Navigator.pushNamed(context, '/recipes/meal_detail',  arguments: {'title': title});
+    Navigator.pushNamed(context, '/recipes/meal_detail',
+        arguments: {'title': title}).then((title) {});
   }
 
   String get affordable {
@@ -40,15 +39,12 @@ class MealItem extends StatelessWidget {
     else
       return "simple";
   }
-  
-  
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap:(){
+        onTap: () {
           selectMeal(context);
-
         },
         child: Card(
           elevation: 4,
@@ -68,7 +64,6 @@ class MealItem extends StatelessWidget {
                       height: 250,
                       width: double.infinity,
                       fit: BoxFit.cover,
-
                     ),
                   ),
                   Positioned(
@@ -102,10 +97,7 @@ class MealItem extends StatelessWidget {
                       children: [Icon(Icons.work), Text("$complex")],
                     ),
                     Row(
-                      children: [
-                        Icon(Icons.attach_money),
-                        Text("$affordable")
-                      ],
+                      children: [Icon(Icons.attach_money), Text("$affordable")],
                     ),
                   ],
                 ),
@@ -115,4 +107,3 @@ class MealItem extends StatelessWidget {
         ));
   }
 }
-//TODO change widget sizes!
