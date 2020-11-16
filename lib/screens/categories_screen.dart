@@ -12,10 +12,10 @@ class CategoriesScreen extends StatelessWidget {
           .map((e) => CategoryItem(e.title, e.color,  e.id))
           .toList(),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
+          maxCrossAxisExtent: MediaQuery.of(context).size.height*0.3,
           childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20),
+          crossAxisSpacing: MediaQuery.of(context).size.width*0.1,
+          mainAxisSpacing: MediaQuery.of(context).size.width*0.1),
     );
   }
 }
